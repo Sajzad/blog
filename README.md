@@ -8,7 +8,7 @@
 
 * Now, we go to blog dir. And create virtual environment with virtualenv: ```virtualenv -p /usr/bin/python3 .env```.
 
-* Activate the virtual environment: source ```.env/bin/activate```.
+* Activate the virtual environment: ```source .env/bin/activate```.
 
 * Install required dependencies: ```pip install -r requirements.txt```.
 
