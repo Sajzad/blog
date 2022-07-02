@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}posts{% endblock %}
+
+{% block content %}
+<section class="container padding-top">
+	<div class="pb-5">
+		<div class="pb-3 d-flex justify-content-between">
+			<p class="h2">{{post.title}}</p>
+			{% if request.user.id == post.user_id %}
+				<form method="POST">
+					{%csrf_token%}
+					<button 
+						name = "check" 
+						value = "delete" 
+						class = "btn btn-danger px-3">Delete Post</button>
+				</form>
+			{% endif %}
+		</div>
+		<div>
+			<img src="{{post.image.url}}" class="post-img">
+		</div>
+		<div class="row pt-5">
+			<div class="col-md-12">
+				<p style="white-space: pre-line;">{{post.description}}</p>
+			</div>
+		</div>
+		<div class="row pt-4">
+			<div class="col-md-8 mx-auto">
+				<h4 class="pb-2 text-secondary">Post a Comment</h4>
+				<form method="POST">
+					{% csrf_token %}
+						<div class="form-group">
+							<textarea
+								{% if request.user.is_authenticated %}
+									placeholder='Type your comment ....'
+								{% else %} 
+									placeholder="You must be logged in to post a comment"
+								{% endif %} 
+								class="form-control"
+								name="comment" 
+								rows="5"></textarea>
+						</div>
+						<div class="pt-2" style="float:right!important;">
+							<button 
+								{% if not request.user.is_authenticated %}disabled{% endif %} 
+								type = "submit"
+								name="check"
+								value="comment" 
+								class="btn btn-primary px-4">Submit</button>
+						</div>
+				</form>
+			</div>
+			{% if request.user.is_authenticated %}
+				<div class="col-md-8 mx-auto">
+					<h4 class="text-secondary border-bottom pb-2">Comments</h4>
+					{% if comments %}
+						{% for comment in comments %}
+							<div class="pt-2">
+								<div class="d-flex justify-content-between">
+									<p class="h5 text-primary">{{comment.user.username}}</p>
+									<p class="pl-4 text-secondary">{{comment.timestamp|timesince}}</p>
+								</div>
+								<div class="comment">
+									<p>{{comment.comment}}</p>
+								</div>
+							</div>
+						{% endfor %}
+					{% else %}
+						<div class="text-center pt-4">
+							<h6 class="text-primary">No comment to show</h6>
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</section>
+{% endblock %}

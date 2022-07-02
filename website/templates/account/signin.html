@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<section class="container padding-top">
+	<div class="d-flex flex-column align-items-center">
+		<div>
+			<p class="h1 text-primary">Sign In</p>
+		</div>
+		<div class="pt-3">
+			<p class="h5">Don't have an Account? <a href="{% url 'auth:signup' %}">Sign up</a></p>
+		</div>
+	</div>
+	<div class="row pt-4">
+		<div class="col-md-5 mx-auto pt-4">
+			{% if errors %}
+				{% for error in errors %}
+					<div class="alert alert-warning alert-dismissible">
+		    			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		    			<strong>Warning!</strong> {{error.error}} !
+		  			</div>
+		  		{% endfor %}
+    		{% endif %}
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="form-group">
+					<label class="form-label">Username/Email *</label>
+					<input type="text" placeholder="Email" name="username" class="form-control">
+				</div>
+				<div class="form-group pt-4">
+					<label class="form-label">Password *</label>
+					<input type="password" placeholder="Password" name="password" class="form-control">
+				</div>
+				<div class="pt-4 d-grid">
+					<button type="submit" class="btn btn-primary">Login</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{% endblock %}

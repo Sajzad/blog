@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}posts{% endblock %}
+
+{% block content %}
+<section class="container padding-top">
+	<div class="d-flex justify-content-between">
+		<p class="h2">All User</p>
+	</div>
+	<div class="row pt-5">
+		<div class="col-md-10 mx-auto">
+			{% if message %}
+				<div class="alert alert-success alert-dismissible">
+	    			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+	    			<strong>Success!</strong> {{message}} !
+	  			</div>
+	  		{% endif %}
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Full Name</th>
+						<th>Username</th>
+						<th>Email</th>
+						<th>Date</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in users %}
+						<tr>
+							<td>{{user.first_name}} {{user.last_name}}</td>
+							<td>{{user.username}}</td>
+							<td>{{user.email}}</td>
+							<td>{{user.date_joined|date:'N d, Y'}}</td>
+							<td>
+								<form method="POST">
+									{%csrf_token%}
+									<div class="form-group">
+										<input type="hidden" name="user_id" value="{{user.id}}"> 
+										<button type="submit" class="btn btn-sm btn-danger">delete</button>
+									</div>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+{% endblock %}

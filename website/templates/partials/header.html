@@ -1,0 +1,44 @@
+<nav class="navbar navbar-dark navbar-expand-sm bg-dark fixed-top" id="navbar">
+    <div class="container">
+        <a href="/" class="navbar-brand">
+        <i class="fas fa-blog"></i> &nbsp;
+        Blog
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="{% url 'base:home' %}" class="nav-link active">
+                    Home
+                </a>
+            </li>
+            {% if request.user.is_superuser or request.user.is_staff%}
+                <li class="nav-item">
+                    <a href="{% url 'base:all-user' %}" class="nav-link font-weight-700 text-warning active">
+                        All User
+                    </a>
+                </li>
+            {% endif %}
+            {% if not request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'auth:signin' %}" class="nav-link active">
+                        Login
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'auth:logout' %}" class="nav-link active">
+                        Logout(<span class="text-warning">{{request.user.username}}</span>)
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        </div>
+
+    </div>
+</nav>
