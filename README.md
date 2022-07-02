@@ -1,4 +1,4 @@
-# blog
+# Blog
 
 ### How do I get set up? ###
 

@@ -14,16 +14,27 @@
 	</div>
 	<div class="row pt-5">
 		<div class="col-md-10 mx-auto">
-			{% for item in posts %}
-				<div class="d-flex flex-row pb-2">
-					<!-- <div class="mr-4">
-						<img src="{{item.image.url}}" width="300px" height="150px">				
-					</div> -->
-					<div class="">
-						<a class="h5" href="/posts/{{item.id}}">{{item.title}}</p>
+			{% if posts %}
+				{% for item in posts %}
+					<div class="d-flex flex-row pb-2">
+						<!-- <div class="mr-4">
+							<img src="{{item.image.url}}" width="300px" height="150px">				
+						</div> -->
+						<div class="">
+							<a class="h5" href="/posts/{{item.id}}">{{item.title}}</p>
+						</div>
 					</div>
+				{% endfor %}
+			{% else %}
+				<div class="text-center">
+					<h6 class="text-primary">
+						No Blog Post to show. 
+						{% if request.user.is_authenticated %}
+							<span>Please click on Add Post to create Blog Post</span>
+						{% endif %}
+					</h6>
 				</div>
-			{% endfor %}
+			{% endif %}
 		</div>
 	</div>
 </section>

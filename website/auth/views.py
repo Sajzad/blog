@@ -1,24 +1,30 @@
+import json, re
+
 from django.shortcuts import render, redirect, reverse
 
 from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 
 
 def client_signup_view(request):
 
     errors = []
+    message = ''
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        first_name = request.POST.get("f_name")
-        last_name = request.POST.get("l_name")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
+        print("signup")
+        data = json.loads(request.body)
+        username = data.get("username")
+        first_name = data.get("f_name")
+        last_name = data.get("l_name")
+        email = data.get("email")
+        password = data.get("password")
 
         if username:
             if User.objects.filter(username=username).exists():
-                error = {"erorr": "This Username Already exists"}
+                error = {"error": "This Username Already exists"}
                 errors.append(error)
         else:
             error = {"error": "Please provide Username"}
@@ -33,7 +39,12 @@ def client_signup_view(request):
             errors.append(error)
         
         if email:
-            if User.objects.filter(email=email).exists():
+            regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+            if not re.fullmatch(regex, email):
+                error = {"error": "Email is not valid"}
+                errors.append(error)
+            
+            elif User.objects.filter(email=email).exists():
                 error = {"error": "This Email already exists"}
                 errors.append(error)
         else:
@@ -47,19 +58,21 @@ def client_signup_view(request):
 
         if not errors:
             User.objects.create_user(
-                    username = username,
-                    first_name = first_name,
-                    last_name = last_name,
-                    email = email,
-                    password = password
-                )
-            return redirect(reverse("auth:signin"))
+                username = username,
+                first_name = first_name,
+                last_name = last_name,
+                email = email,
+                password = password
+            )
+            message = "Account created Succesfully"
+        print(errors)
+        resp = {
+            'errors': errors,
+            'message': message
+        }
+        return JsonResponse(data=resp, status=200)
 
-    context = {
-        'errors': errors
-    }
-
-    return render(request, 'account/signup.html', context)
+    return render(request, 'account/signup.html')
 
 def client_signin_view(request):
     
